@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Source.Gameplay
 {
     [RequireComponent(typeof(Collider))]
-    public class TriggerWrapperView : ViewComponent<TriggerController>
+    public class TriggerWrapperView : ViewComponent<ITriggerController>
     {
         private BallComponent ball;
         
@@ -15,12 +15,6 @@ namespace Source.Gameplay
             ball = BallComponent.Get();
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject != ball.GetBallObject())
-                return;
-            
-            controller.OnBallCollision();
-        }
+        private void OnTriggerEnter(Collider other) => controller.OnTriggered(other);
     }
 }

@@ -13,7 +13,5 @@ namespace Source.Configs
         [SelectImplementation(typeof(PlayerInputSettings))]
         [SerializeReference]
         public PlayerInputSettings inputSettings;
-
-        public string test;
     }
 }

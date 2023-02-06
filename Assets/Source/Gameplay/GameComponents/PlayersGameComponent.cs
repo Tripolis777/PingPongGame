@@ -14,10 +14,6 @@ namespace Source.Gameplay.GameComponents
         [SerializeField]
         private PlayerInfo[] players;
 
-        private List<TriggerController> scoreControllers = new List<TriggerController>();
-
-        public event Action<int> OnBallMissed;
-
         public override UniTask LoadComponent(GameScene gameScene)
         {
             if (players.Any(x => x.viewComponent == null))
@@ -38,28 +34,17 @@ namespace Source.Gameplay.GameComponents
                 var playerInfo = players[i];
                 _controllers.Add(new PlayerController(playerInfo.viewComponent, gameState.players[i].playerData));
              
-                if (playerInfo.scoreCollector)
-                {
-                    var scoreController = new TriggerController(playerInfo.scoreCollector, i);
-                    scoreController.OnScoreCollected += OnScoreCollected;
-                    scoreControllers.Add(scoreController);
-                }
+                // if (playerInfo.scoreCollector)
+                // {
+                //     var scoreController = new TriggerController(playerInfo.scoreCollector, i);
+                //     scoreController.OnScoreCollected += OnScoreCollected;
+                //     scoreControllers.Add(scoreController);
+                // }
             }
             
             return UniTask.CompletedTask;
         }
 
-        public override void OnGameLoaded()
-        {
-            base.OnGameLoaded();
-            foreach (var scoreController in scoreControllers)
-            {
-                
-            }
-        }
-
-        private void OnScoreCollected(int playerIndex) => OnBallMissed?.Invoke(playerIndex);
-        
         [Serializable]
         public struct PlayerInfo
         {

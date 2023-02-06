@@ -15,12 +15,9 @@ MonoBehaviour:
   velocityFadeTime: 1
   isMainPlayer: 0
   inputSettings:
-    rid: 6895132125191733250
-  test: 
+    rid: 6895132125191733251
   references:
     version: 2
     RefIds:
-    - rid: 6895132125191733250
-      type: {class: PlayerAISettings, ns: Source.Gameplay.Player, asm: Assembly-CSharp}
-      data:
-        testString: "\u0435\u0443\u044B\u0435"
+    - rid: 6895132125191733251
+      type: {class: PlayerHumanSettings, ns: Source.Gameplay.Player, asm: Assembly-CSharp}

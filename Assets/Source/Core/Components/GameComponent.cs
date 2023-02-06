@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Source.Core
 {
-    public abstract class GameComponent : MonoBehaviour, IPausable
+    public abstract class GameComponent : MonoBehaviour, IPausable, IDisposable
     {
         protected List<IGameplayController> _controllers = new List<IGameplayController>();
 
@@ -29,6 +30,18 @@ namespace Source.Core
             foreach (var controller in _controllers.OfType<IPausable>())
                 controller.Resume();
         }
+
+        protected void AddController(IGameplayController controller) => _controllers.Add(controller);
+
+        public virtual void Dispose()
+        {
+            foreach (var controller in _controllers)
+                controller.Dispose();
+            
+            _controllers.Clear();
+        }
+
+        private void OnDestroy() => Dispose();
     }
 
     public abstract class GameComponent<T> : GameComponent where T : GameComponent

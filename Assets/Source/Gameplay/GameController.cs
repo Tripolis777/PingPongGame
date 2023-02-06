@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Source.Core;
 using Source.Core.Service;
@@ -8,20 +9,22 @@ namespace Source.Gameplay
 {
     public class GameController : GameScene
     {
-        [SerializeField]
-        private GameState gameState;
+        [SerializeField] private GameState gameState;
 
         private BallComponent ballComponent;
-        private PlayerState playerState;
         private IPlayerStateService playerStateService;
+        private BestScoreController bestScoreController;
+
+        public event Action<GameState> OnGameStateChange;
 
         public override async UniTask Init()
         {
             await base.Init();
 
             playerStateService = ServiceLocator.Instance.GetService<IPlayerStateService>();
-            playerState = playerStateService.GetState();
-
+            bestScoreController = new BestScoreController(this, playerStateService);
+            bestScoreController.Init();
+            
             ballComponent = GetGameComponent<BallComponent>();
             StartGame();
         }
@@ -33,6 +36,15 @@ namespace Source.Gameplay
 
         public GameState GetGameState() => gameState;
 
+        public void ChangePlayerScore(int playerIndex, int deltaScore)
+        {
+            var playerInfo = gameState.players[playerIndex];
+            playerInfo.score += deltaScore;
+            OnGameStateChange?.Invoke(gameState);
+            
+            StartGame();
+        }
+
         public void StartGame()
         {
             ballComponent.ResetState();
@@ -41,6 +53,8 @@ namespace Source.Gameplay
         private void OnDestroy()
         {
             playerStateService.SaveState();
+            bestScoreController.Dispose();
+            bestScoreController = null;
         }
     }
 }
