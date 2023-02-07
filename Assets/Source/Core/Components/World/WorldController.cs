@@ -7,7 +7,7 @@ namespace Source.Core
 {
     public sealed class WorldController : MonoBehaviorSingleton<WorldController>
     {
-        private const string DEFAUL_SCENE_NAME = "MainMenu";
+        private const string DEFAUL_SCENE_NAME = "GameScene";
         
         [SerializeField]
         private WorldCameraController worldCameraController;
@@ -50,14 +50,9 @@ namespace Source.Core
                 return FindGameScene(scene);
             
             await SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
-            return FindGameScene(scene);
+            return FindObjectOfType<GameScene>();
         }
-        
-        private void InitializeScene()
-        {
-            
-        }
-        
+
         private static GameScene GetFirstLoadedScene()
         {
             for (var i = 0; i < SceneManager.sceneCount; i++)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Source.Core
@@ -7,5 +8,13 @@ namespace Source.Core
         public Color ballColor;
         public int ballViewIndex;
         public int bestScore;
+
+        public event Action<PlayerState> OnChanged;
+
+        public void UpdateBestScore(int bestScore)
+        {
+            this.bestScore = bestScore;
+            OnChanged?.Invoke(this);
+        }
     }
 }

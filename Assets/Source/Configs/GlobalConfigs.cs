@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 namespace Source.Configs
@@ -14,7 +13,7 @@ namespace Source.Configs
             get
             {
                 if (_instance == null)
-                    _instance = AssetDatabase.LoadAssetAtPath<GlobalConfigs>(GLOBAL_CONFIG_PATH);
+                    _instance = Resources.Load<GlobalConfigs>(GLOBAL_CONFIG_PATH);
                 
                 return _instance;
             }

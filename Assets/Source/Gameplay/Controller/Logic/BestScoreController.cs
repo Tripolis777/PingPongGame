@@ -39,7 +39,7 @@ namespace Source.Gameplay
                 return;
 
             var playerState = _playerStateService.GetState();
-            playerState.bestScore = newScore;
+            playerState.UpdateBestScore(newScore);
             lastBestScore = newScore;
         }
     }

@@ -6,6 +6,9 @@ namespace Source.View
     public abstract class ViewComponent : MonoBehaviour
     {
         public abstract void Init(GameplayController controller);
+
+        public void Show() => gameObject.SetActive(true);
+        public void Hide() => gameObject.SetActive(false);
     }
     
     public abstract class ViewComponent<T> : ViewComponent where T : class, IGameplayController

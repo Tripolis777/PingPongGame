@@ -43,6 +43,13 @@ namespace Source.Core.Input
                 if (touch.phase == TouchPhase.Moved)
                 {
                     Debug.Log($"Touch Delta = {touch.deltaPosition}");
+                    if(CheckSwipe(touch.deltaPosition))
+                        inputService.SendAction(new InputAction()
+                        {
+                            actionType = InputActionType.Swipe,
+                            position = touch.position,
+                            lastPosition = touch.position - touch.deltaPosition,
+                        });
                 }
 
                 if (touch.phase == TouchPhase.Canceled)
@@ -57,8 +64,8 @@ namespace Source.Core.Input
             if (isMouseMoved)
             {
                 var mousePosition = UnityEngine.Input.mousePosition;
-                var swipe = CalculateSwipe(mousePosition - startMousePosition);
-                if (swipe.direction != SwipeDirection.None)
+                var isSwipe = CheckSwipe(mousePosition - startMousePosition);
+                if (isSwipe)
                     inputService.SendAction(new InputAction()
                     {
                         actionType = InputActionType.Swipe,
@@ -82,21 +89,8 @@ namespace Source.Core.Input
             }
         }
 
-        private Swipe CalculateSwipe(Vector2 delta)
-        {
-            var swipe = new Swipe();
-            if (Mathf.Abs(delta.x) > inputConfig.swipeThreshold)
-            {
-                swipe.direction |= delta.x > 0 ? SwipeDirection.Right : SwipeDirection.Left;
-            }
-
-            if (Mathf.Abs(delta.y) > inputConfig.swipeThreshold)
-            {
-                swipe.direction |= delta.y > 0 ? SwipeDirection.Up : SwipeDirection.Down;
-            }
-            
-            return swipe;
-        }
+        private bool CheckSwipe(Vector2 delta) => Mathf.Abs(delta.x) > inputConfig.swipeThreshold ||
+                                               Mathf.Abs(delta.y) > inputConfig.swipeThreshold;
 
         private void OnDisable()
         {

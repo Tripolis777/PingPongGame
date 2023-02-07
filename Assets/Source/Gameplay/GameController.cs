@@ -3,11 +3,12 @@ using Cysharp.Threading.Tasks;
 using Source.Core;
 using Source.Core.Service;
 using Source.Gameplay.GameComponents;
+using UnityEditor;
 using UnityEngine;
 
 namespace Source.Gameplay
 {
-    public class GameController : GameScene
+    public class GameController : GameScene, IPausable
     {
         [SerializeField] private GameState gameState;
 
@@ -16,6 +17,7 @@ namespace Source.Gameplay
         private BestScoreController bestScoreController;
 
         public event Action<GameState> OnGameStateChange;
+        private float lastTimeScale;
 
         public override async UniTask Init()
         {
@@ -50,6 +52,32 @@ namespace Source.Gameplay
             ballComponent.ResetState();
         }
 
+        public void Pause()
+        {
+            foreach (var component in componentsByType.Values)
+                component.Pause();
+            
+            lastTimeScale = Time.timeScale;
+            Time.timeScale = 0f;
+        }
+
+        public void Resume()
+        {
+            foreach (var component in componentsByType.Values)
+                component.Resume();
+            
+            Time.timeScale = lastTimeScale;
+        }
+
+        public void QuitGame()
+        {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+            return;
+#endif
+            Application.Quit();
+        }
+        
         private void OnDestroy()
         {
             playerStateService.SaveState();
