@@ -6,7 +6,7 @@ namespace Source.Gameplay
     {
         private GameController _gameController;
         private IPlayerStateService _playerStateService;
-        private int lastBestScore;
+        private int _lastBestScore;
 
         public BestScoreController(GameController gameController, IPlayerStateService playerStateService)
         {
@@ -17,7 +17,7 @@ namespace Source.Gameplay
         public override void Init()
         {
             var playerState = _playerStateService.GetState();
-            lastBestScore = playerState.bestScore;
+            _lastBestScore = playerState.bestScore;
             
             _gameController.OnGameStateChange += OnGameStateChanged;
         }
@@ -35,12 +35,12 @@ namespace Source.Gameplay
         private void OnGameStateChanged(GameState gameState)
         {
             var newScore = gameState.MainPlayer.score;
-            if (lastBestScore >= newScore)
+            if (_lastBestScore >= newScore)
                 return;
 
             var playerState = _playerStateService.GetState();
             playerState.UpdateBestScore(newScore);
-            lastBestScore = newScore;
+            _lastBestScore = newScore;
         }
     }
 }

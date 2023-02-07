@@ -2,27 +2,27 @@ namespace Source.Core.Service
 {
     public class PlayerStateService : IPlayerStateService
     {
-        private PlayerState cachedState;
+        private PlayerState _cachedState;
 
         public PlayerState GetState()
         {
-            if (cachedState == null)
+            if (_cachedState == null)
             {
                 var storageService = ServiceLocator.Instance.GetService<IStorageDataService>();
-                if (!storageService.TryLoadData(out cachedState))
-                    cachedState = new PlayerState();
+                if (!storageService.TryLoadData(out _cachedState))
+                    _cachedState = new PlayerState();
             }
 
-            return cachedState;
+            return _cachedState;
         }
 
         public void SaveState()
         {
-            if (cachedState == null)
+            if (_cachedState == null)
                 return;
 
             var storageService = ServiceLocator.Instance.GetService<IStorageDataService>();
-            storageService.SaveData(cachedState);
+            storageService.SaveData(_cachedState);
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Source.Configs
     public class PlayerConfig : ScriptableObject
     {
         public float velocityFadeTime;
-        public bool isMainPlayer;
         
         [SelectImplementation(typeof(PlayerInputSettings))]
         [SerializeReference]

@@ -11,12 +11,12 @@ namespace Source.Gameplay.Player
         private float _distanceToField;
         private bool isPaused;
 
-        public event Action<Vector3> onChangePosition;
+        public event Action<Vector3> OnChangePosition;
         
         public HumanPlayerInput(PlayerHumanSettings settings, float distanceToField)
         {
             _inputService = settings.inputService;
-            _inputService.onAction += OnInputAction;
+            _inputService.OnAction += OnInputAction;
             _cam = settings.gameCamera;
             _distanceToField = distanceToField;
         }
@@ -34,13 +34,13 @@ namespace Source.Gameplay.Player
 
             var delta = worldPosition - lastWorldPosition;
             var position = new Vector3(delta.x, 0, 0);
-            onChangePosition?.Invoke(position);
+            OnChangePosition?.Invoke(position);
         }
 
         public void Dispose()
         {
             Debug.Log("Human input dispose");
-            _inputService.onAction -= OnInputAction;
+            _inputService.OnAction -= OnInputAction;
             _inputService = null;
             _cam = null;
         }

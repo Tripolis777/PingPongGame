@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Player Opponent
   m_EditorClassIdentifier: 
   velocityFadeTime: 1
-  isMainPlayer: 0
   inputSettings:
     rid: 6895132125191733251
   references:

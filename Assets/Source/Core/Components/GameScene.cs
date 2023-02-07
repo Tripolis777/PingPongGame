@@ -7,8 +7,7 @@ namespace Source.Core
 {
     public abstract class GameScene : MonoBehaviour
     {
-        [SerializeField]
-        private Transform cameraPivot;
+        [SerializeField] private Transform cameraPivot;
         
         protected Camera gameCamera;
 

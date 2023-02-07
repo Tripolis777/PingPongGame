@@ -12,9 +12,9 @@ namespace Source.Gameplay
     {
         [SerializeField] private GameState gameState;
 
-        private BallComponent ballComponent;
-        private IPlayerStateService playerStateService;
-        private BestScoreController bestScoreController;
+        private BallComponent _ballComponent;
+        private IPlayerStateService _playerStateService;
+        private BestScoreController _bestScoreController;
 
         public event Action<GameState> OnGameStateChange;
         private float lastTimeScale;
@@ -23,17 +23,16 @@ namespace Source.Gameplay
         {
             await base.Init();
 
-            playerStateService = ServiceLocator.Instance.GetService<IPlayerStateService>();
-            bestScoreController = new BestScoreController(this, playerStateService);
-            bestScoreController.Init();
+            _playerStateService = ServiceLocator.Instance.GetService<IPlayerStateService>();
+            _bestScoreController = new BestScoreController(this, _playerStateService);
+            _bestScoreController.Init();
             
-            ballComponent = GetGameComponent<BallComponent>();
+            _ballComponent = GetGameComponent<BallComponent>();
             StartGame();
         }
 
         protected override void AddGameComponents()
         {
-            //gameObject.GetOrAddComponent<PlayersGameComponent>();
         }
 
         public GameState GetGameState() => gameState;
@@ -49,7 +48,7 @@ namespace Source.Gameplay
 
         public void StartGame()
         {
-            ballComponent.ResetState();
+            _ballComponent.ResetState();
         }
 
         public void Pause()
@@ -80,9 +79,9 @@ namespace Source.Gameplay
         
         private void OnDestroy()
         {
-            playerStateService.SaveState();
-            bestScoreController.Dispose();
-            bestScoreController = null;
+            _playerStateService.SaveState();
+            _bestScoreController.Dispose();
+            _bestScoreController = null;
         }
     }
 }

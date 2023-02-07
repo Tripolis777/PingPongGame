@@ -1,5 +1,3 @@
-using System;
-using Source.Gameplay;
 using Source.Gameplay.Controller.UI;
 using TMPro;
 using UnityEngine;

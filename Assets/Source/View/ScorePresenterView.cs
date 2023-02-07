@@ -6,8 +6,7 @@ namespace Source.View
 {
     public class ScorePresenterView : ViewComponent<ScorePresenterController>
     {
-        [SerializeField]
-        private TMP_Text scoreText;
+        [SerializeField] private TMP_Text scoreText;
 
         public void SetScore(int playerScore, int opponentScore)
         {

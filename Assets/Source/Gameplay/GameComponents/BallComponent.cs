@@ -9,11 +9,12 @@ namespace Source.Gameplay.GameComponents
     {
         [SerializeField]
         private BallViewComponent ball;
+
         [SerializeField]
         private Transform ballStartPivot;
 
         private BallController _ballController;
-        
+
         public override UniTask LoadComponent(GameScene gameScene)
         {
             _ballController = new BallController(ball, GlobalConfigs.Instance.ballData);
@@ -27,7 +28,5 @@ namespace Source.Gameplay.GameComponents
             _ballController.SetToPosition(ballStartPivot);
             _ballController.AddRandomDirection();
         }
-
-        public GameObject GetBallObject() => ball.gameObject;
     }
 }

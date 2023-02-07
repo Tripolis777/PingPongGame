@@ -4,20 +4,20 @@ using UnityEngine;
 
 namespace Source.View
 {
-    public sealed class PlayerViewComponent : ViewComponent<PlayerController>, IBallInteractable
+    public sealed class PlayerViewComponent : ViewComponent<PlayerController>
     {
         [SerializeField] private GameObject playerView;
         [SerializeField] private Collider playerCollider;
         [SerializeField] private Collider[] walls;
         
-        private Vector2 xBorders;
+        private Vector2 _xBorders;
 
         public override void Init(GameplayController controller)
         {
             base.Init(controller);
 
             var playerWidth = playerCollider.bounds.size.x / 2;
-            xBorders = new Vector2(float.MaxValue, float.MinValue);
+            _xBorders = new Vector2(float.MaxValue, float.MinValue);
             foreach (var wall in walls)
             {
                 var wallBounds = wall.bounds;
@@ -25,12 +25,12 @@ namespace Source.View
                 var minX = wallBounds.center.x - width / 2;
                 var maxX = wallBounds.center.x + width / 2;
 
-                xBorders.x = Mathf.Min(xBorders.x, maxX);
-                xBorders.y = Mathf.Max(xBorders.y, minX);
+                _xBorders.x = Mathf.Min(_xBorders.x, maxX);
+                _xBorders.y = Mathf.Max(_xBorders.y, minX);
             }
 
-            xBorders.x += playerWidth;
-            xBorders.y -= playerWidth;
+            _xBorders.x += playerWidth;
+            _xBorders.y -= playerWidth;
         }
 
         public Vector3 UpdatePosition(Vector3 deltaPosition)
@@ -39,10 +39,10 @@ namespace Source.View
             var newPosition = lastPosition + deltaPosition;
 
             // Check walls
-            if (newPosition.x < xBorders.x)
-                newPosition.x = xBorders.x;
-            else if (newPosition.x > xBorders.y)
-                newPosition.x = xBorders.y;
+            if (newPosition.x < _xBorders.x)
+                newPosition.x = _xBorders.x;
+            else if (newPosition.x > _xBorders.y)
+                newPosition.x = _xBorders.y;
             
             transform.position = newPosition;
             return newPosition;

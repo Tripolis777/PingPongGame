@@ -11,8 +11,7 @@ namespace Source.Gameplay.GameComponents
 {
     public class PlayersGameComponent : GameComponent<PlayersGameComponent>
     {
-        [SerializeField]
-        private PlayerInfo[] players;
+        [SerializeField] private PlayerInfo[] players;
 
         public override UniTask LoadComponent(GameScene gameScene)
         {
@@ -33,13 +32,6 @@ namespace Source.Gameplay.GameComponents
             {
                 var playerInfo = players[i];
                 _controllers.Add(new PlayerController(playerInfo.viewComponent, gameState.players[i].playerData));
-             
-                // if (playerInfo.scoreCollector)
-                // {
-                //     var scoreController = new TriggerController(playerInfo.scoreCollector, i);
-                //     scoreController.OnScoreCollected += OnScoreCollected;
-                //     scoreControllers.Add(scoreController);
-                // }
             }
             
             return UniTask.CompletedTask;
@@ -49,7 +41,6 @@ namespace Source.Gameplay.GameComponents
         public struct PlayerInfo
         {
             public PlayerViewComponent viewComponent;
-            public TriggerWrapperView scoreCollector;
         }
     }
 }

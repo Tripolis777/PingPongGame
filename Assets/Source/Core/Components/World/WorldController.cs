@@ -9,10 +9,9 @@ namespace Source.Core
     {
         private const string DEFAUL_SCENE_NAME = "GameScene";
         
-        [SerializeField]
-        private WorldCameraController worldCameraController;
+        [SerializeField] private WorldCameraController worldCameraController;
 
-        public GameScene currentScene { get; private set; }
+        public GameScene CurrentScene { get; private set; }
         
         public WorldCameraController WorldCameraController => worldCameraController;
 
@@ -27,16 +26,16 @@ namespace Source.Core
 
         public async UniTask LoadScene(string name = null)
         {
-            if (currentScene != null)
+            if (CurrentScene != null)
                 await UnloadCurrentScene();
 
-            currentScene = await LoadSceneInternal(name);
-            await currentScene.Init();
+            CurrentScene = await LoadSceneInternal(name);
+            await CurrentScene.Init();
         }
 
         private async UniTask UnloadCurrentScene()
         {
-            var scene = currentScene.gameObject.scene;
+            var scene = CurrentScene.gameObject.scene;
             await SceneManager.UnloadSceneAsync(scene);
         }
         

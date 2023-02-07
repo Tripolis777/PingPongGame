@@ -10,16 +10,16 @@ namespace Source.Editor
     [CustomPropertyDrawer(typeof(SelectImplementationAttribute))]
     public class SelectImplementationDrawer : PropertyDrawer
     {
-        private static readonly float lineHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+        private static readonly float LINE_HEIGHT = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
             
         private static Dictionary<Type, Type[]> implementations = new Dictionary<Type, Type[]>();
         private static Dictionary<Type, string[]> implNames = new Dictionary<Type, string[]>();
 
-        private int selectedImplIndex = -1;
-        private bool showCreateSection = false;
+        private int _selectedImplIndex = -1;
+        private bool _showCreateSection = false;
 
         private Type BaseType => (attribute as SelectImplementationAttribute)?.instanceType;
-        private float OptionsHeight => lineHeight * (showCreateSection ? 4 : 2) + EditorGUIUtility.standardVerticalSpacing;
+        private float OptionsHeight => LINE_HEIGHT * (_showCreateSection ? 4 : 2) + EditorGUIUtility.standardVerticalSpacing;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -55,12 +55,12 @@ namespace Source.Editor
         {
             if (string.IsNullOrEmpty(property.managedReferenceFullTypename))
             {
-                selectedImplIndex = 0;
-                showCreateSection = true;
+                _selectedImplIndex = 0;
+                _showCreateSection = true;
                 property.isExpanded = true;
             }
-            else if (selectedImplIndex == -1)
-                selectedImplIndex = TryFindInstanceIndex(property);
+            else if (_selectedImplIndex == -1)
+                _selectedImplIndex = TryFindInstanceIndex(property);
 
             if (!property.isExpanded)
                 return;
@@ -69,16 +69,16 @@ namespace Source.Editor
             var separatorRect = new Rect(position.x, position.y + height + EditorGUIUtility.standardVerticalSpacing, position.width + 4f, OptionsHeight);
             var labelRect = new Rect(separatorRect.x + 2f, separatorRect.y + EditorGUIUtility.standardVerticalSpacing, position.width,
                 EditorGUIUtility.singleLineHeight);
-            var chooseButtonRect = new Rect(labelRect.x, labelRect.y + lineHeight, labelRect.width,
+            var chooseButtonRect = new Rect(labelRect.x, labelRect.y + LINE_HEIGHT, labelRect.width,
                 EditorGUIUtility.singleLineHeight);
             
             EditorGUI.DrawRect(separatorRect, new Color(0f, 1f, 0f, 0.3f));
 
-            GUI.Box(labelRect, "Настройки реализации");
-            if (GUI.Button(chooseButtonRect, showCreateSection ? "Hide" : "Change"))
-                showCreateSection = !showCreateSection;
+            GUI.Box(labelRect, "Implementation Settings");
+            if (GUI.Button(chooseButtonRect, _showCreateSection ? "Hide" : "Change"))
+                _showCreateSection = !_showCreateSection;
             
-            if (showCreateSection)
+            if (_showCreateSection)
                 DrawChooseImplementation(chooseButtonRect, property);
         }
 
@@ -92,13 +92,13 @@ namespace Source.Editor
             if (implList?.Length == 0)
                 return;
             
-            var selectImplPopupRect = new Rect(position.x, position.y + lineHeight, position.width,
+            var selectImplPopupRect = new Rect(position.x, position.y + LINE_HEIGHT, position.width,
                 EditorGUIUtility.singleLineHeight);
-            var createButtonRect = new Rect(selectImplPopupRect.x, selectImplPopupRect.y + lineHeight,
+            var createButtonRect = new Rect(selectImplPopupRect.x, selectImplPopupRect.y + LINE_HEIGHT,
                 position.width, EditorGUIUtility.singleLineHeight);
 
             
-            selectedImplIndex = EditorGUI.Popup(selectImplPopupRect, "Implementation", selectedImplIndex,
+            _selectedImplIndex = EditorGUI.Popup(selectImplPopupRect, "Implementation", _selectedImplIndex,
                 implNames[BaseType]);
 
             if (GUI.Button(createButtonRect, "Create"))
@@ -112,7 +112,7 @@ namespace Source.Editor
             if (implList == null || implList.Length == 0)
                 return;
             
-            property.managedReferenceValue = Activator.CreateInstance(implList[selectedImplIndex]);
+            property.managedReferenceValue = Activator.CreateInstance(implList[_selectedImplIndex]);
             property.serializedObject.ApplyModifiedProperties();
         }
 

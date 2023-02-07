@@ -33,7 +33,7 @@ namespace Source.Gameplay.Player
         public override void Init()
         {
             base.Init();
-            _playerInput.onChangePosition += OnChangePosition;
+            _playerInput.OnChangePosition += OnChangePosition;
         }
 
         protected override void OnPause()

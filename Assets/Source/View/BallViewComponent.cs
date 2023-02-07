@@ -6,29 +6,28 @@ namespace Source.Gameplay
     [RequireComponent(typeof(Collider))]
     public class BallViewComponent : ViewComponent<BallController>
     {
-        [SerializeField]
-        private GameObject viewContainer;
+        [SerializeField] private GameObject viewContainer;
 
-        private Vector3 direction;
-        private float speed;
+        private Vector3 _direction;
+        private float _speed;
         
         public void LoadView(GameObject view)
         {
             Instantiate(view, viewContainer.transform);
         }
 
-        public void SetSpeed(float speed) => this.speed = speed;
+        public void SetSpeed(float speed) => this._speed = speed;
         
-        public void SetDirection(Vector3 direction) => this.direction = direction.normalized;
+        public void SetDirection(Vector3 direction) => this._direction = direction.normalized;
 
         private void OnCollisionEnter(Collision collision)
         {
-            controller.OnCollision(direction, collision);
+            controller.OnCollision(_direction, collision);
         }
 
         private void Update()
         {
-            var positionDelta = direction * speed * Time.deltaTime;
+            var positionDelta = _direction * _speed * Time.deltaTime;
             transform.position += positionDelta;
         }
     }

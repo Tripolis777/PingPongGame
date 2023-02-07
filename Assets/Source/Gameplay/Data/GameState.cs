@@ -6,7 +6,6 @@ namespace Source.Gameplay
     public class GameState
     {
         public PlayerGameState[] players;
-        public bool isPaused;
 
         public PlayerGameState MainPlayer => players[0];
         public PlayerGameState OpponentPlayer => players[1];

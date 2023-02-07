@@ -7,18 +7,17 @@ namespace Source.Core.Input
 {
     public sealed class InputManager : MonoBehaviorSingleton<InputManager>
     {
-        [SerializeField]
-        private InputConfig inputConfig;
+        [SerializeField] private InputConfig inputConfig;
 
-        private Dictionary<int, Touch> currentTouches = new Dictionary<int, Touch>();
-        private Vector3 startMousePosition;
-        private bool isMouseMoved;
-        private Vector3 lastPosition;
-        private IInputService inputService;
+        private Dictionary<int, Touch> _currentTouches = new Dictionary<int, Touch>();
+        private Vector3 _startMousePosition;
+        private bool _isMouseMoved;
+        private Vector3 _lastPosition;
+        private IInputService _inputService;
 
         protected override void Awake()
         {
-            inputService = ServiceLocator.Instance.GetService<IInputService>();
+            _inputService = ServiceLocator.Instance.GetService<IInputService>();
             Debug.Log($"Touch enables: {UnityEngine.Input.touchSupported} and simulate is {UnityEngine.Input.simulateMouseWithTouches}"); 
         }
 
@@ -37,14 +36,14 @@ namespace Source.Core.Input
                 if (touch.phase == TouchPhase.Began)
                 {
                     Debug.Log("Start began");
-                    currentTouches.Add(touch.fingerId, touch);
+                    _currentTouches.Add(touch.fingerId, touch);
                 }
 
                 if (touch.phase == TouchPhase.Moved)
                 {
                     Debug.Log($"Touch Delta = {touch.deltaPosition}");
                     if(CheckSwipe(touch.deltaPosition))
-                        inputService.SendAction(new InputAction()
+                        _inputService.SendAction(new InputAction()
                         {
                             actionType = InputActionType.Swipe,
                             position = touch.position,
@@ -54,38 +53,38 @@ namespace Source.Core.Input
 
                 if (touch.phase == TouchPhase.Canceled)
                 {
-                    currentTouches.Remove(touch.fingerId);
+                    _currentTouches.Remove(touch.fingerId);
                 }
             }
         }
 
         private void CalculateMouse()
         {
-            if (isMouseMoved)
+            if (_isMouseMoved)
             {
                 var mousePosition = UnityEngine.Input.mousePosition;
-                var isSwipe = CheckSwipe(mousePosition - startMousePosition);
+                var isSwipe = CheckSwipe(mousePosition - _startMousePosition);
                 if (isSwipe)
-                    inputService.SendAction(new InputAction()
+                    _inputService.SendAction(new InputAction()
                     {
                         actionType = InputActionType.Swipe,
                         position = mousePosition,
-                        lastPosition = lastPosition
+                        lastPosition = _lastPosition
                     });
 
-                lastPosition = mousePosition;
+                _lastPosition = mousePosition;
             }
             
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                startMousePosition = UnityEngine.Input.mousePosition;
-                isMouseMoved = true;
+                _startMousePosition = UnityEngine.Input.mousePosition;
+                _isMouseMoved = true;
             }
 
             if (UnityEngine.Input.GetMouseButtonUp(0))
             {
-                isMouseMoved = false;
-                lastPosition = Vector3.zero;
+                _isMouseMoved = false;
+                _lastPosition = Vector3.zero;
             }
         }
 
@@ -94,7 +93,7 @@ namespace Source.Core.Input
 
         private void OnDisable()
         {
-            currentTouches.Clear();
+            _currentTouches.Clear();
         }
     }
 }

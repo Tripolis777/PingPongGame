@@ -48,10 +48,10 @@ namespace Source.Core
     {
         public static T Get()
         {
-            if (WorldController.Instance == null || WorldController.Instance.currentScene == null)
+            if (WorldController.Instance == null || WorldController.Instance.CurrentScene == null)
                 return null;
 
-            return WorldController.Instance.currentScene.GetGameComponent<T>();
+            return WorldController.Instance.CurrentScene.GetGameComponent<T>();
         } 
     }
 }
