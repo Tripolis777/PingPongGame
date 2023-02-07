@@ -5,7 +5,7 @@ namespace Source.Configs
     [CreateAssetMenu(fileName = "GlobalConfig", menuName = "Configs/Global Config")]
     public class GlobalConfigs : ScriptableObject
     {
-        private const string GLOBAL_CONFIG_PATH = "Assets/Resources/Configs/GlobalConfig.asset";
+        private const string GLOBAL_CONFIG_PATH = "Configs/GlobalConfig";
 
         private static GlobalConfigs _instance;
         public static GlobalConfigs Instance

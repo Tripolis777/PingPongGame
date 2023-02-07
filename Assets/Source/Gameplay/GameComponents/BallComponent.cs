@@ -17,7 +17,7 @@ namespace Source.Gameplay.GameComponents
         public override UniTask LoadComponent(GameScene gameScene)
         {
             _ballController = new BallController(ball, GlobalConfigs.Instance.ballData);
-            _controllers.Add(_ballController);
+            AddController(_ballController);
 
             return UniTask.CompletedTask;
         }
